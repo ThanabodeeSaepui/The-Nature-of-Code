@@ -41,6 +41,16 @@ class Mover {
       location.y = 0;
     }
   }
+  PVector attract(Mover m) {
+    PVector force = PVector.sub(location,m.location);
+    float distance = force.mag();
+    distance = constrain(distance,5.0,25.0);
+    force.normalize();
+    float G = 4;
+    float strength = (G * mass * m.mass) / (distance * distance);
+    force.mult(strength);
+    return force;
+  }
 }
 class Attractor {
   float mass;
@@ -68,7 +78,7 @@ class Attractor {
 }
 int height = 1080;
 int width = 1980;
-Mover[] movers = new Mover[1000];
+Mover[] movers = new Mover[50];
 Attractor a;
 void setup() {
   size(1980, 1080);
@@ -86,9 +96,10 @@ void draw() {
     }
   }
   for (int i = 0; i < movers.length; i++) {
-    PVector force = a.attract(movers[i]);
-    movers[i].applyForce(force);
-
+    for (int j = 0; j < movers.length; j++) {
+      PVector force = movers[j].attract(movers[i]);
+      movers[i].applyForce(force);
+    }
     movers[i].update();
     movers[i].display();
     movers[i].checkEdges();
