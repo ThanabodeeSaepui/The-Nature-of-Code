@@ -3,8 +3,10 @@ class Mover {
   PVector velocity;
   PVector acceleration;
   float mass;
+  color c;
   Mover(float m, float x, float y) {
     mass = m;
+    c = color(random(255), random(255), random(255));
     location = new PVector(x,y);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
@@ -20,7 +22,7 @@ class Mover {
   }
   void display() {
     stroke(0);
-    fill(175);
+    fill(c);
     ellipse(location.x,location.y,mass*16,mass*16);
   }
   void checkEdges() {
