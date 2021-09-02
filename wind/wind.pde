@@ -54,6 +54,12 @@ class Mover {
   PVector velocity;
   PVector acceleration;
   float mass;
+  Mover(float m, float x, float y) {
+    mass = m;
+    location = new PVector(x,y);
+    velocity = new PVector(0,0);
+    acceleration = new PVector(0,0);
+  }
   void applyForce(PVector force) {
     force.div(mass);
     acceleration.add(force);
@@ -68,13 +74,7 @@ class Mover {
     fill(175);
     ellipse(location.x,location.y,mass*16,mass*16);
   }
-  Mover() {
-    location = new PVector(random(width),random(height));
-    velocity = new PVector(0,0);
-    acceleration = new PVector(0,0);
-    mass = 1.0;
-  }
-    void checkEdges() {
+  void checkEdges() {
     if (location.x > width) {
       location.x = width;
       velocity.x *= -1;
@@ -90,19 +90,22 @@ class Mover {
 }
 int height = 360;
 int width = 640;
-Mover mover;
+Mover[] movers = new Mover[100];
 void setup() {
-  size(640, 360); // x,y
-  mover = new Mover();
-  
+  size(640, 360);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i] = new Mover(random(1,1.5),30,30);
+  }
 }
 void draw() {
-  background(204);
-  mover.update();
-  mover.checkEdges();
-  mover.display();
+  background(234);
   PVector wind = new PVector(0.01,0);
   PVector gravity = new PVector(0,0.1);
-  mover.applyForce(wind);
-  mover.applyForce(gravity);
+  for (int i = 0; i < movers.length; i++) {
+    movers[i].applyForce(wind);
+    movers[i].applyForce(gravity);
+    movers[i].update();
+    movers[i].display();
+    movers[i].checkEdges();
+  }
 }
