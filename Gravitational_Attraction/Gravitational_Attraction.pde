@@ -3,10 +3,10 @@ class Mover {
   PVector velocity;
   PVector acceleration;
   float mass;
-  color c;
+  //color c;
   Mover(float m, float x, float y) {
     mass = m;
-    c = color(random(255), random(255), random(255));
+    //c = color(random(255), random(255), random(255));
     location = new PVector(x,y);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
@@ -22,7 +22,8 @@ class Mover {
   }
   void display() {
     stroke(0);
-    fill(c);
+    //fill(c);
+    fill(200);
     ellipse(location.x,location.y,mass*16,mass*16);
   }
   void checkEdges() {
@@ -78,18 +79,18 @@ class Attractor {
 }
 int height = 1080;
 int width = 1980;
-Mover[] movers = new Mover[50];
-Attractor a;
+Mover[] movers = new Mover[150];
+//Attractor a;
 void setup() {
   size(1980, 1080);
   for (int i = 0; i < movers.length; i++) {
     movers[i] = new Mover(random(0.2,2),random(width),random(height));
   }
-  a = new Attractor();
+  //a = new Attractor();
 }
 void draw() {
   background(234);
-  a.display();
+  //a.display();
   if (mousePressed) {
     for (int i = 0; i < movers.length; i++) {
       movers[i] = new Mover(random(1,2),random(width),random(height));
@@ -97,8 +98,10 @@ void draw() {
   }
   for (int i = 0; i < movers.length; i++) {
     for (int j = 0; j < movers.length; j++) {
-      PVector force = movers[j].attract(movers[i]);
-      movers[i].applyForce(force);
+      if (i != j) {
+        PVector force = movers[j].attract(movers[i]);
+        movers[i].applyForce(force);
+      }
     }
     movers[i].update();
     movers[i].display();
