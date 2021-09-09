@@ -19,7 +19,7 @@ void draw() {
   background(255);
   boundary.display();
   if (mousePressed) {
-    MultiShape s = new MultiShape(10,mouseX,mouseY);
+    MultiShape s = new MultiShape(6,mouseX,mouseY);
     shapes.add(s);
   }
   for (MultiShape s: shapes) {

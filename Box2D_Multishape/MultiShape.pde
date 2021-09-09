@@ -3,7 +3,8 @@ class MultiShape {
   float w = 8;
   float r;
   Body body;
-  MultiShape(float r,float x, float y) {
+  MultiShape(float r_,float x, float y) {
+    r = r_;
     BodyDef bd = new BodyDef();
     bd.type = BodyType.DYNAMIC;
     Vec2 center = new Vec2(x,y);
@@ -20,9 +21,7 @@ class MultiShape {
     cs.m_radius = box2d.scalarPixelsToWorld(r);
     
     Vec2 offset = new Vec2(0,-h/2);
-    // Converting the vector to Box2D world
     offset = box2d.vectorPixelsToWorld(offset);
-    // Setting the local position of the circle
     cs.m_p.set(offset.x,offset.y);
     
     body.createFixture(ps,1.0);
@@ -31,7 +30,7 @@ class MultiShape {
   void display() {
     Vec2 pos = box2d.getBodyPixelCoord(body);
     float a = body.getAngle();
-
+    
     rectMode(CENTER);
     pushMatrix();
     translate(pos.x,pos.y);
