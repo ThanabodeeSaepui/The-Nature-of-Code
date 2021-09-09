@@ -2,58 +2,7 @@ import shiffman.box2d.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
-class Chain {
-  Body body;
-  float w;
-  float h;
-  Chain() {
-    w = 16;
-    h = 16;
 
-    // Build body.
-    BodyDef bd = new BodyDef();
-    bd.type = BodyType.DYNAMIC;
-    bd.position.set(box2d.coordPixelsToWorld(mouseX,mouseY));
-    body = box2d.createBody(bd);
-
-    // Build shape.
-    ChainShape chain = new ChainShape();
-    Vec2[] vertices = new Vec2[2];
-    vertices[0] = box2d.coordPixelsToWorld(0,150);
-    vertices[1] = box2d.coordPixelsToWorld(width,150);
-    chain.createChain(vertices, vertices.length);
-    
-    FixtureDef fd = new FixtureDef();
-    fd.shape = chain;
-    fd.density = 1;
-    // Set physics parameters.
-    fd.friction = 0.3;
-    fd.restitution = 0.5;
-
-    // Attach the Shape to the Body with the Fixture.
-    body.createFixture(fd);
-  }
-  void display() {
-    //[full] We need the Body’s location and angle.
-    Vec2 pos = box2d.getBodyPixelCoord(body);
-    float a = body.getAngle();
-    //[end]
-    pushMatrix();
-    //[full] Using the Vec2 position and float angle to translate and rotate the rectangle
-    translate(pos.x,pos.y);
-    rotate(-a);
-    //[end]
-    fill(175);
-    stroke(0);
-    rectMode(CENTER);
-    rect(0,0,w,h);
-    popMatrix();
-  }
-  // This function removes a body from the Box2D world.
-  void killBody() {
-    box2d.destroyBody(body);
-  }
-}
 class Surface {
   ArrayList<Vec2> surface;
 
@@ -98,25 +47,29 @@ class Surface {
   }
 }
 Box2DProcessing box2d;
-ArrayList<Chain> chains;
 Surface surface;
+ArrayList<Mover> movers;
 void setup() {
-  size(640,360);
+  size(500,300);
   box2d = new Box2DProcessing(this);
   box2d.createWorld();
-  box2d.setGravity(0, -10);
-  chains = new ArrayList<Chain>();
+
+  // Make a Surface object.
   surface = new Surface();
+  movers = new ArrayList<Mover>();
 }
+
 void draw() {
   box2d.step();
+
   background(255);
   if (mousePressed) {
-    Chain p = new Chain();
-    chains.add(p);
+    Mover m = new Mover(8,width/2,0);
+    movers.add(m);
   }
-  for (Chain c: chains) {
-    c.display();
+  for (Mover m: movers) {
+    m.display();
   }
+  // Draw the Surface.
   surface.display();
 }
